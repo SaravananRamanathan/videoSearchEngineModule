@@ -1,0 +1,79 @@
+{%extends 'ccextractorProcess/base.html'%}
+{%block mainTitle%}
+Video SearchEngine
+{%endblock%}
+
+{%block mainContent%}
+<form method="post" action="/" enctype="multipart/form-data" id="formfileupload">
+
+    {% csrf_token %}
+    <!--custom pop-up message-->
+    {% include 'ccextractorProcess/messages.html' %}
+    <!--row align-items-center justify-content-center    or row justify-content-center-->
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div>
+                <p>{{form.file}}</p>
+                <!--<p>
+                    <input type="file"
+                        id="uploadVideo" name="uploadVideo"
+                        accept="video/mp4, video/mpg">
+                </p>-->
+                <!--if ajax needed class = uploadButton data-form-file={{form.file}}-->
+                <p>
+                    <button type="submit" name="upload" value="upload" class="btn btn-success " >Upload The video</button>
+                    <button type="button" class="btn btn-primary refreshButton"><span class="glyphicon glyphicon-refresh "></span> Refresh</button>
+                    <button type="button" class="btn btn-info infoButton">Info</button>
+                </p>
+                <p> <!--celery part...-->
+                    <div class='progress-wrapper'>
+                        <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+                    </div>
+                    <div id="progress-bar-message">Waiting for upload to start...</div>
+                    <p><div id="celery-result"></div></p>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+</form>
+{% load static %}
+<!--celery pprogress-->
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="{% static 'celery_progress/celery_progress.js' %}"></script>
+{%if task_id%}
+<script>
+/*// vanilla JS version
+document.addEventListener("DOMContentLoaded", function () {
+///celery-progress/45b099c8-32e0-4865-a011-0f148f802c17/
+var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+console.log(progressUrl);
+CeleryProgressBar.initProgressBar(progressUrl);
+});*/
+// JQuery
+var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+/*$(function () {
+  CeleryProgressBar.initProgressBar(progressUrl)
+});
+*/
+// JQuery --- some basic customiztion for celery task result display.
+//need jqery for customization ,... looks like cant get it done with normal js
+$(function () {
+  CeleryProgressBar.initProgressBar(progressUrl, {
+    onResult: customResult,
+  })
+});
+
+function customResult(resultElement, result) {
+  $( resultElement ).append(
+    $('<p>').text('Words List: ').append( $(result) )
+  );
+}
+
+</script>
+{%endif%}
+{%endblock%}
+
+
+

@@ -1,0 +1,59 @@
+{%extends 'ccextractorProcess/base.html'%}
+
+{%block mainTitle%}
+Video Library
+{%endblock%}
+
+{%block mainContent%}
+    
+    
+    <nav class="customSide-navbar" style="padding-left: 0px;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;">
+        <ul class="customSide-navbar-nav" >
+            {%for i in data%}
+            <li class="customSide-nav-item">
+                <button type="button" class="btn btn-outline-primary videoSelector" data-key={{i}}>{{i}}</button>
+            </li>
+            {%endfor%}
+        </ul>
+    </nav>
+    
+
+
+    <div id="content" name="main_content" class="custom-main">
+       
+        
+            
+        
+
+        <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div>
+                <p>
+                    <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                           <input class="infoSearchBar" type="search" name="search">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success infoSearchButton">Search words</button>
+                    </div>
+                </p>
+                <p>
+                <video id="infoVideo" width="800" height="425" controls>
+                    <source id="infoVideoSource" src=" " type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                </p>
+                <p>
+                    <div id="searchAnswerText" calss="answer-hidden searchAnswer">
+                        <!--<p id="searchAnswerText" class="answer-hidden searchAnswer" style="color:white;">HI i was hidden</p>-->
+                    </div>
+                </p>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!--need to load jquery here --- long story short: since jquery is not defined at base but rather defined at home.html (due to some technical issues) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+{%endblock%}
